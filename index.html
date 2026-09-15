@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusCore Matrix - Universal Systems Panel</title>
+    <style>
+        :root {
+            --bg-gradient-start: #F8F9FA; 
+            --bg-gradient-end: #E9ECEF;   
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #2B2D42;
+            --text-muted: #6C757D;
+            --whatsapp-green: #25D366;
+            --email-red: #EA4335;
+            --admin-blue: #0052CC;
+            --subscribe-pink-bg: #FFF0F5; 
+            --subscribe-pink-border: #FFB6C1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .header-brand-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .placeholder-box {
+            width: 110px;
+            height: 110px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .placeholder-box:hover {
+            transform: scale(1.05);
+            border-color:none;
+            background: rgba(0, 82, 204, 0.05);
+        }
+
+        .placeholder-box span {
+            font-size: 11px;
+            color: var(--admin-blue);
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .placeholder-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-core h1 {
+            font-size: 2.8rem;
+            margin: 0 0 8px 0;
+            color: #333;
+            letter-spacing: -1px;
+        }
+
+        .brand-core p {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 20px auto 0 auto;
+            padding: 0 20px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border: 2px solid rgba(0, 82, 204, 0.2);
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .search-bar:focus {
+            border-color: var(--admin-blue);
+            box-shadow: 0 4px 20px rgba(0, 82, 204, 0.15);
+            background: #ffffff;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        #adminPanel {
+            display: none;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--admin-blue);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #F0F2F5;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-header h3 { margin: 0; color: #333; }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-danger { background: #DC3545; color: white; }
+        .btn-danger:hover { background: #BD2130; }
+        .btn-secondary { background: #6C757D; color: white; }
+        .btn-secondary:hover { background: #5A6268; }
+        .btn-primary { background: var(--admin-blue); color: white; }
+        .btn-primary:hover { background: #0043A4; }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CED4DA;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .niche-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--admin-blue);
+            color: white;
+            border-color: var(--admin-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-media {
+            height: 180px;
+            background: #E9ECEF;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--admin-blue);
+            margin-bottom: 5px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .card-btn {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: var(--admin-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .card-btn:hover { background: #0043A4; }
+
+        .admin-actions {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #ECEFF1;
+            gap: 10px;
+        }
+
+        .subscribe-box {
+            background: var(--subscribe-pink-bg);
+            border: 2px solid var(--subscribe-pink-border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 650px;
+            margin: 40px auto;
+            box-shadow: 0 8px 24px rgba(255, 182, 193, 0.2);
+        }
+
+        .subscribe-box h3 {
+            color: #D1477A; 
+            margin-top: 0;
+        }
+
+        .subscribe-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .subscribe-input {
+            flex-grow: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--subscribe-pink-border);
+            border-radius: 8px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .subscribe-btn {
+            background: #FF69B4; 
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .subscribe-btn:hover { background: #FF1493; }
+
+        footer {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .disclosure {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 25px auto;
+        }
+
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .f-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .f-btn:hover { transform: translateY(-2px); }
+        .btn-whatsapp { background-color: var(--whatsapp-green); }
+        .btn-email { background-color: var(--email-red); }
+        .btn-portal { background-color: var(--admin-blue); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-brand-wrap">
+            <div class="placeholder-box" onclick="triggerPlaceholderImage('left-img-placeholder')" id="left-img-placeholder">
+                <span>🔒 Left Image<br>(Admin Click)</span>
+            </div>
+
+            <div class="brand-core">
+                <h1>🌐 NexusCore Matrix</h1>
+                <p>Cross-Niche Optimization Systems Hub</p>
+            </div>
+
+            <div class="placeholder-box" onclick="triggerPlaceholderImage('right-img-placeholder')" id="right-img-placeholder">
+                <span>🔒 Right Image<br>(Admin Click)</span>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" id="customerProductSearch" placeholder="Search for any product of your wish..." onkeyup="executeMatrixSearch()">
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div id="adminPanel">
+            <div class="admin-header">
+                <h3>🛡 Global Affiliate Engine Panel Active</h3>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="exportDatabaseBackup()">📥 Export Backup JSON</button>
+                    <button class="btn btn-secondary" onclick="changeAdminPassword()">Change Password</button>
+                    <button class="btn btn-danger" onclick="exitAdminPortal()">Exit Panel</button>
+                </div>
+            </div>
+            
+            <form id="productForm" onsubmit="handleProductSubmission(event)">
+                <h4>✏ Add / Edit Product Card Specifications</h4>
+                <input type="hidden" id="editCardId">
+                <div class="form-group">
+                    <label for="systemCategory">System Category Target:</label>
+                    <select id="systemCategory" class="form-control">
+                        <option value="combat">🥋 Combat Sports & Analytics</option>
+                        <option value="writing">✍ Creative Writing & Poetry Tools</option>
+                        <option value="ict">💻 ICT, Coding & Business Infrastructure</option>
+                        <option value="lifestyle">🌟 General Lifestyle & Extra Products</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productTitle">Product Display Title:</label>
+                    <input type="text" id="productTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDesc">Short Description:</label>
+                    <textarea id="productDesc" class="form-control" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productMedia">Media Source Link (Image URL):</label>
+                    <input type="url" id="productMedia" class="form-control" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="productLink">Your Outbound Affiliate Referral Link:</label>
+                    <input type="url" id="productLink" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="formSubmitBtn">Publish Component</button>
+            </form>
+        </div>
+
+        <h2>Welcome to NexusCore Matrix</h2>
+        <p>Hi, I'm a daily life products provider, technology and systems specialist engineering optimal multi-niche operational workflows. We look at high-performance systems through an ICT lens, streamlining structures across businesses, digital asset deployment, tactical athletic training, and creative frameworks to help you win.</p>
+
+        <div class="niche-tabs">
+            <button class="tab-btn active" onclick="switchCategory('all', this)">🌐 All Niches</button>
+            <button class="tab-btn" onclick="switchCategory('combat', this)">🥋 Combat Sports</button>
+            <button class="tab-btn" onclick="switchCategory('writing', this)">✍ Creative Writing</button>
+            <button class="tab-btn" onclick="switchCategory('ict', this)">💻 ICT Hub</button>
+            <button class="tab-btn" onclick="switchCategory('lifestyle', this)">🌟 General Lifestyle</button>
+        </div>
+
+        <h3>Active System Offerings</h3>
+        <div class="product-grid" id="matrixProductGrid"></div>
+
+        <div class="subscribe-box">
+            <h3>📥 Join the NexusCore Engine Intelligence Pipeline</h3>
+            <p>Receive direct technical pipelines, asset deep dives, and system automation strategies across all niches straight to your inbox.</p>
+            <form class="subscribe-form" onsubmit="handlePipelineSubscription(event)">
+                <input type="email" class="subscribe-input" id="pipelineEmail" placeholder="Enter your best professional email asset..." required>
+                <button type="submit" class="subscribe-btn">Subscribe Now</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p class="disclosure">ℹ **Affiliate Disclosure:** When you buy a product, software or training gear through tracking links on this website, I may earn a small commission at no additional cost to you.</p>
+        
+        <div class="footer-buttons">
+            <a href="https://wa.me/256743431912" class="f-btn btn-whatsapp" target="_blank">💬 WhatsApp Inbox</a>
+            <a href="mailto:nexuscorematrix@gmail.com" class="f-btn btn-email">✉ Email Me</a>
+            <button class="f-btn btn-portal" onclick="openAdminPortal()">🔒 Open Admin Portal</button>
+        </div>
+
+        <p>© Since 2026 NexusCore Matrix. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentAdminPassword = "admin";
+        let isAdminLoggedIn = false;
+        let selectedCategoryFilter = "all";
+
+        let defaultDatabase = [
+            { id: 1, category: "combat", title: "Striking Mechanics Analyzer", desc: "Computer vision mapping algorithms designed to audit strike angles, tactical feet placement, and biomechanical velocity output metrics.", media: "https://images.unsplash.com/photo-1517438476312-10d79c07750d?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 2, category: "combat", title: "Fight Camp Planner Engine", desc: "Automated macrocycle operational matrix built specifically to organize neural recovery loads, weight cuts, and functional combat conditioning cycles.", media: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 3, category: "combat", title: "Grappling Flowcharts Pro", desc: "Interactive tactical response pathways maps plotting safe transition logic matrix trees for catch-wrestling and positional jiu-jitsu.", media: "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 4, category: "combat", title: "Vitals Track Analytics Suite", desc: "A connected wearable data bridge dashboard monitoring resting heartbeat reserves, CNS depletion rates, and high-intensity match readiness indicators.", media: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80", link: "#" },
+            
+            { id: 5, category: "writing", title: "Metaphor Matrix Pipeline", desc: "Semantic relational database engine designed to dismantle linear imagery patterns and output compound thematic conceptual metaphors instantly.", media: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 6, category: "writing", title: "Verse Engine Framework", desc: "Structural rhythmic cadence processor measuring structural syllable weights and internal stanza rhyme-density maps natively.", media: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 7, category: "writing", title: "Mythos Blueprint Builder", desc: "An advanced comprehensive lore-mapping architecture built to map multi-generational timeline tracking nodes and world history structures.", media: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 8, category: "writing", title: "Scribal Focus Terminal", desc: "Markdown runtime environment filtering visual clutter out to isolate character counts, draft intervals, and deep focus flow milestones.", media: "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?auto=format&fit=crop&w=400&q=80", link: "#" },
+
+            { id: 9, category: "ict", title: "OmniCloud Automation Core", desc: "Declarative webhook orchestrator managing multi-tenant microservices deployment instances instantly with built-in telemetry parsing.", media: "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 10, category: "ict", title: "API Gateway Optimization Kit", desc: "Reverse proxy middleware schema layer optimizing routing traffic payloads, query caching behaviors, and connection pooling protocols.", media: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 11, category: "ict", title: "Database Normalizer Matrix", desc: "Relational entity mapping suite auditing dependency anomalies to refactor unstructured schemas into secure performance models.", media: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 12, category: "ict", title: "SecOps Threat Shield Base", desc: "Lightweight background network container checking port exposures and analyzing active system processes for permission escalation leaks.", media: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80", link: "#" },
+
+            { id: 13, category: "lifestyle", title: "Circadian Light Controller", desc: "Hardware automation script mapping monitor temperature settings to geo-coordinates to regulate healthy evening hormone production.", media: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 14, category: "lifestyle", title: "Biometric Macro Tracker", desc: "Algorithmic nutritional ledger scaling essential fuel intakes based on training output and cognitive processing fatigue indices.", media: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 15, category: "lifestyle", title: "Minimalist Workspace Deck", desc: "Design reference layout architecture patterns created to clear processing environments of physical drag artifacts.", media: "https://images.unsplash.com/photo-1499955085172-a104c9463ece?auto=format&fit=crop&w=400&q=80", link: "#" },
+            { id: 16, category: "lifestyle", title: "Deep Sleep Optimization Tracker", desc: "Digital check routine framework designed to structure parameters for non-sleep deep rest cycles to restore active performance fast.", media: "https://images.unsplash.com/photo-1511295742364-92b9345f6852?auto=format&fit=crop&w=400&q=80", link: "#" }
+        ];
+
+        let productDatabase = JSON.parse(localStorage.getItem("nexuscore_products")) || defaultDatabase;
+
+        function saveDatabaseToLocalStorage() {
+            localStorage.setItem("nexuscore_products", JSON.stringify(productDatabase));
+        }
+
+        function renderMatrixCards(dataToRender = productDatabase) {
+            const gridContainer = document.getElementById("matrixProductGrid");
+            gridContainer.innerHTML = "";
+
+            let filteredList = dataToRender;
+            if (selectedCategoryFilter !== "all") {
+                filteredList = dataToRender.filter(item => item.category === selectedCategoryFilter);
+            }
+
+            if (filteredList.length === 0) {
+                gridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align: center; font-style: italic; color: var(--text-muted); padding: 30px;">No active system components matching criteria found.</p>`;
+                return;
+            }
+
+            filteredList.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.setAttribute("data-id", item.id);
+
+                const imageSource = item.media ? item.media : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80";
+
+                card.innerHTML = `
+                    <div class="card-media">
+                        <img src="${imageSource}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-category">${item.category} System</div>
+                        <h4 class="card-title">${item.title}</h4>
+                        <p class="card-desc">${item.desc}</p>
+                        <a href="${item.link}" class="card-btn" target="_blank">Access Component Link</a>
+                        <div class="admin-actions" style="display: ${isAdminLoggedIn ? 'flex' : 'none'}">
+                            <button class="btn btn-secondary" style="flex:1; padding: 6px;" onclick="initiateCardEdit(${item.id})">Edit</button>
+                            <button class="btn btn-danger" style="flex:1; padding: 6px;" onclick="deleteCardAsset(${item.id})">Delete</button>
+                        </div>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        function executeMatrixSearch() {
+            const queryText = document.getElementById("customerProductSearch").value.toLowerCase().trim();
+            
+            const matches = productDatabase.filter(product => {
+                return product.title.toLowerCase().includes(queryText) || 
+                       product.desc.toLowerCase().includes(queryText) ||
+                       product.category.toLowerCase().includes(queryText);
+            });
+
+            renderMatrixCards(matches);
+        }
+
+        function switchCategory(categoryKey, element) {
+            selectedCategoryFilter = categoryKey;
+            
+            const buttons = document.querySelectorAll(".tab-btn");
+            buttons.forEach(btn => btn.classList.remove("active"));
+            
+            if (element) {
+                element.classList.add("active");
+            }
+            
+            executeMatrixSearch();
+        }
+
+        function verifyAdminActionAuthentication() {
+            if (isAdminLoggedIn) return true;
+            
+            const passwordAttempt = prompt("🔒 Enter Secure Admin Authorization Key:");
+            if (passwordAttempt === currentAdminPassword) {
+                isAdminLoggedIn = true;
+                syncAdminUiLayerState();
+                return true;
+            } else if (passwordAttempt !== null) {
+                alert("🚫 Access Denied: Invalid Administrative Credentials.");
+            }
+            return false;
+        }
+
+        function openAdminPortal() {
+            if (verifyAdminActionAuthentication()) {
+                document.getElementById("adminPanel").style.display = "block";
+                window.scrollTo({ top: document.getElementById("adminPanel").offsetTop - 20, behavior: 'smooth' });
+            }
+        }
+
+        function exitAdminPortal() {
+            isAdminLoggedIn = false;
+            syncAdminUiLayerState();
+            document.getElementById("adminPanel").style.display = "none";
+            document.getElementById("productForm").reset();
+            document.getElementById("editCardId").value = "";
+            document.getElementById("formSubmitBtn").innerText = "Publish Component";
+        }
+
+        function changeAdminPassword() {
+            const oldPass = prompt("Enter current admin security password:");
+            if (oldPass === currentAdminPassword) {
+                const newPass = prompt("Enter your new secure password phrase:");
+                if (newPass && newPass.trim().length > 0) {
+                    currentAdminPassword = newPass.trim();
+                    alert("✅ Admin control password phrase updated successfully.");
+                } else {
+                    alert("Cancelled: Password phrase cannot be empty.");
+                }
+            } else if (oldPass !== null) {
+                alert("Incorrect password validation factor.");
+            }
+        }
+
+        function syncAdminUiLayerState() {
+            const actionBars = document.querySelectorAll(".admin-actions");
+            actionBars.forEach(bar => {
+                bar.style.display = isAdminLoggedIn ? "flex" : "none";
+            });
+            renderMatrixCards();
+        }
+
+        function triggerPlaceholderImage(placeholderId) {
+            if (verifyAdminActionAuthentication()) {
+                const imgUrl = prompt("Identity Confirmed! Please input your web asset destination URL:");
+                if (imgUrl && imgUrl.trim().length > 0) {
+                    const block = document.getElementById(placeholderId);
+                    block.innerHTML = `<img src="${imgUrl.trim()}" alt="Admin Updated Asset">`;
+                    localStorage.setItem("nexuscore_img_" + placeholderId, imgUrl.trim());
+                }
+            }
+        }
+
+        function loadPlaceholderImages() {
+            ['left-img-placeholder', 'right-img-placeholder'].forEach(id => {
+                const savedImg = localStorage.getItem("nexuscore_img_" + id);
+                if (savedImg) {
+                    document.getElementById(id).innerHTML = `<img src="${savedImg}" alt="Admin Updated Asset">`;
+                }
+            });
+        }
+
+        function handleProductSubmission(e) {
+            e.preventDefault();
+            if (!isAdminLoggedIn) return;
+
+            const editId = document.getElementById("editCardId").value;
+            const cat = document.getElementById("systemCategory").value;
+            const title = document.getElementById("productTitle").value;
+            const desc = document.getElementById("productDesc").value;
+            const media = document.getElementById("productMedia").value;
+            const link = document.getElementById("productLink").value;
+
+            if (editId) {
+                const index = productDatabase.findIndex(item => item.id == editId);
+                if (index !== -1) {
+                    productDatabase[index] = { id: parseInt(editId), category: cat, title, desc, media, link };
+                }
+                document.getElementById("editCardId").value = "";
+                document.getElementById("formSubmitBtn").innerText = "Publish Component";
+            } else {
+                const generatedId = productDatabase.length > 0 ? Math.max(...productDatabase.map(p => p.id)) + 1 : 1;
+                productDatabase.push({ id: generatedId, category: cat, title, desc, media, link });
+            }
+
+            saveDatabaseToLocalStorage();
+            document.getElementById("productForm").reset();
+            renderMatrixCards();
+        }
+
+        function initiateCardEdit(productId) {
+            const product = productDatabase.find(item => item.id === productId);
+            if (!product) return;
+
+            document.getElementById("editCardId").value = product.id;
+            document.getElementById("systemCategory").value = product.category;
+            document.getElementById("productTitle").value = product.title;
+            document.getElementById("productDesc").value = product.desc;
+            document.getElementById("productMedia").value = product.media;
+            document.getElementById("productLink").value = product.link;
+
+            document.getElementById("formSubmitBtn").innerText = "Save Product Structural Changes";
+            window.scrollTo({ top: document.getElementById("adminPanel").offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function deleteCardAsset(productId) {
+            if (confirm("Are you confident you want to delete this active product system component?")) {
+                productDatabase = productDatabase.filter(item => item.id !== productId);
+                saveDatabaseToLocalStorage();
+                executeMatrixSearch();
+            }
+        }
+
+        function exportDatabaseBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(productDatabase, null, 4));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "nexuscore_matrix_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function handlePipelineSubscription(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById("pipelineEmail");
+            const userEmail = emailInput.value.trim();
+
+            if (userEmail) {
+                alert(`🚀 System Active! Check your inbox soon at: ${userEmail}\nWelcome to the NexusCore Engine Intelligence Pipeline.`);
+                emailInput.value = "";
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            loadPlaceholderImages();
+            renderMatrixCards();
+        });
+    </script>
+</body>
+</html>
